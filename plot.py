@@ -72,7 +72,7 @@ if __name__ == """__main__""":
         print "\nper host ownership percentage:"
         print "address\t\townership percentage"
         for i in sorted(host_ownership.items(), lambda x, y: cmp(x[1][0],  y[1][0])):
-            print "%s\t%s" % (i[0], float(i[1][0]))
+            print "%s\t%s" % (i[0].ljust(15), float(i[1][0]))
 
         print "\nhost ownership histogram:"
         histogram.histogram(host_ownership.values(), options)
