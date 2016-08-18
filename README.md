@@ -7,7 +7,7 @@ Visualize and inspect Apache Cassandra token ownership by host
 Ownership for DC: DC1
 total ownership:  100.0
 
-per host ownership percentage:10.1.1
+per host ownership percentage:
 address		ownership percentage
 10.1.1.84  	3.79196223696
 10.1.1.118 	4.12424999772
