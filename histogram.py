@@ -259,6 +259,9 @@ def histogram(stream, options):
         print format_string % (bucket_min, bucket_max, bucket_count, options.dot *
                                star_count, percentage)
 
+    return (mvsd.mean(), mvsd.var(), mvsd.sd(),
+            median(accepted_data, key=lambda x: x.value))
+
 
 def build_options():
     parser = OptionParser()

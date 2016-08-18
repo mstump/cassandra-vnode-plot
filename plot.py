@@ -11,6 +11,17 @@ IP_REGEX = re.compile("""^(?:[0-9]{1,3}\.){3}[0-9]{1,3}""")
 WHITESPACE_REGEX = re.compile("\s+")
 BIG = math.pow(2, 64)
 
+class Color:
+   PURPLE = '\033[95m'
+   CYAN = '\033[96m'
+   DARKCYAN = '\033[36m'
+   BLUE = '\033[94m'
+   GREEN = '\033[92m'
+   YELLOW = '\033[93m'
+   RED = '\033[91m'
+   BOLD = '\033[1m'
+   UNDERLINE = '\033[4m'
+   END = '\033[0m'
 
 def pairwise(iterable):
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
@@ -69,10 +80,25 @@ if __name__ == """__main__""":
         print "Ownership for DC:", dc_name
         print "total ownership: ", reduce(lambda x, y: x+y, token_ownership.values()) * 100
 
-        print "\nper host ownership percentage:"
-        print "address\t\townership percentage"
-        for i in sorted(host_ownership.items(), lambda x, y: cmp(x[1][0],  y[1][0])):
-            print "%s\t%s" % (i[0].ljust(15), float(i[1][0]))
-
         print "\nhost ownership histogram:"
-        histogram.histogram(host_ownership.values(), options)
+        (mean, variance, standard_deviation, median) = histogram.histogram(host_ownership.values(), options)
+        standard_deviation = Decimal(standard_deviation)
+
+        print "\nper host ownership percentage:"
+        print "address        \ttokens\tpercent\t\tdeviantion"
+        for i in sorted(host_ownership.items(), lambda x, y: cmp(x[1][0], y[1][0])):
+            host = i[0]
+            percentage = i[1][0]
+            highlight = False
+            tokens = len(host_to_tokens[host])
+
+            if percentage > median + standard_deviation \
+               or percentage < median - standard_deviation:
+                highlight = True
+
+            output = "%s\t%s\t%s\t%s" % (host.ljust(15), tokens, float(percentage), float(percentage / median))
+
+            if highlight:
+                print(Color.RED + output + Color.END)
+            else:
+                print(output)
